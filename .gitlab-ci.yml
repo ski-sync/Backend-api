@@ -16,7 +16,7 @@ sonarqube-check:
       - .sonar/cache
   script: 
   # give token to sonar-scanner
-    - sonar-scanner -Dsonar.login=${SONAR_TOKEN}
+    - sonar-scanner -Dsonar.token=${SONAR_TOKEN}
   allow_failure: true
   only:
     - feature/pipelines
