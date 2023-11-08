@@ -15,8 +15,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script: 
-    # network_mode: host
-    - sonar-scanner -Dsonar.projectKey=iot2960642_ydays_backend_api_AYuuzEyEJv5yB7oZ9Ko- -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}
+    - sonar-scanner 
   allow_failure: true
   only:
     - feature/pipelines
