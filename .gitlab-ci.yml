@@ -1,0 +1,86 @@
+image: node:latest
+
+variables:
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+
+stages:
+  - build
+  - test
+  - deploy
+  - sonarqube-check
+
+build:
+  stage: build
+  before_script:
+    - npm ci
+  script:
+    - npm run build
+  cache:
+    untracked: true
+    key: node_modules-cache-${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull-push
+
+test:
+  stage: test
+  script:
+    - npm run test
+  dependencies:
+    - test
+  cache:
+    untracked: true
+    key: node_modules-cache-${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull-push
+  artifacts:
+    paths:
+      - ./dist
+
+
+docker-post:
+  image: docker:24.0.5
+  stage: deploy
+  services:
+    - docker:24.0.5-dind
+  needs:
+    - job: build
+  only:
+    - main
+  script:
+    - docker login registry.gitlab.com -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - docker build -t registry.gitlab.com/iot2960642/web-services/doctors-api:$CI_COMMIT_REF_SLUG .
+    - docker push registry.gitlab.com/iot2960642/web-services/doctors-api:$CI_COMMIT_REF_SLUG
+
+deploy:
+  image: docker:24.0.5
+  stage: deploy
+  services:
+    - docker:24.0.5-dind
+  script:
+    - echo "Deploying to production server"
+  only:
+    - main
+  needs:
+    - job: docker-post
+
+sonarqube-check:
+  stage: sonarqube-check
+  image: 
+    name: sonarsource/sonar-scanner-cli:5.0
+    entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: 
+  # give token to sonar-scanner
+    - sonar-scanner
+  allow_failure: true
