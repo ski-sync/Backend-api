@@ -7,8 +7,8 @@ variables:
   DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
 
 stages:
-  - test
   - build
+  - test
   - deploy
   - sonarqube-check
 
