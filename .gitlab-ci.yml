@@ -1,6 +1,72 @@
+image: node:latest
+
+variables:
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+
 stages:
-    - sonarqube-check
-    - sonarqube-vulnerability-report
+  - test
+  - build
+  - deploy
+  - sonarqube-check
+
+build:
+  stage: build
+  before_script:
+    - npm ci
+  script:
+    - npm run build
+  cache:
+    untracked: true
+    key: node_modules-cache-${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull-push
+
+test:
+  stage: test
+  script:
+    - npm run test
+  dependencies:
+    - test
+  cache:
+    untracked: true
+    key: node_modules-cache-${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull-push
+  artifacts:
+    paths:
+      - ./dist
+
+
+docker-post:
+  image: docker:24.0.5
+  stage: deploy
+  services:
+    - docker:24.0.5-dind
+  needs:
+    - job: build
+  only:
+    - main
+  script:
+    - docker login registry.gitlab.com -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - docker build -t registry.gitlab.com/iot2960642/web-services/doctors-api:$CI_COMMIT_REF_SLUG .
+    - docker push registry.gitlab.com/iot2960642/web-services/doctors-api:$CI_COMMIT_REF_SLUG
+
+deploy:
+  image: docker:24.0.5
+  stage: deploy
+  services:
+    - docker:24.0.5-dind
+  script:
+    - echo "Deploying to production server"
+  only:
+    - main
+  needs:
+    - job: docker-post
 
 sonarqube-check:
   stage: sonarqube-check
@@ -18,19 +84,3 @@ sonarqube-check:
   # give token to sonar-scanner
     - sonar-scanner
   allow_failure: true
-  only:
-    - feature/pipelines
-
-sonarqube-vulnerability-report:
-  stage: sonarqube-vulnerability-report
-  script:
-    - 'curl -u "${SONAR_TOKEN}:" "${SONAR_HOST_URL}/api/issues/gitlab_sast_export?projectKey=iot2960642_ydays_backend_api_AYuuzEyEJv5yB7oZ9Ko-&branch=${CI_COMMIT_BRANCH}&pullRequest=${CI_MERGE_REQUEST_IID}" -o gl-sast-sonar-report.json'
-  allow_failure: true
-  only:
-    - feature/pipelines
-  artifacts:
-    expire_in: 1 day
-    reports:
-      sast: gl-sast-sonar-report.json
-  dependencies:
-    - sonarqube-check
