@@ -67,8 +67,6 @@ docker-post:
   stage: deploy
   services:
     - docker:24.0.5-dind
-  needs:
-    - job: build
   only:
     - main
   script:
