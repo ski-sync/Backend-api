@@ -57,6 +57,8 @@ sonarqube-check:
       - .sonar/cache
   script:
     - sonar-scanner
+  dependencies:
+    - test
   only:
     - feature/pipelines
     - main
