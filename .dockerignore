@@ -1,0 +1,7 @@
+node_modules/
+kubernetes/
+test/
+README.md
+Dockerfile
+.gitignore
+.gitlab-ci.yml
