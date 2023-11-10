@@ -7,30 +7,16 @@ variables:
   DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
 
 stages:
-  - build
   - test
-  - deploy
   - sonarqube-check
-
-build:
-  stage: build
-  before_script:
-    - npm ci
-  script:
-    - npm run build
-  cache:
-    untracked: true
-    key: node_modules-cache-${CI_COMMIT_REF_SLUG}
-    paths:
-      - node_modules/
-    policy: pull-push
+  - deploy
 
 test:
   stage: test
   script:
+    - npm install
     - npm run test
-  dependencies:
-    - test
+    - npm run test:cov
   cache:
     untracked: true
     key: node_modules-cache-${CI_COMMIT_REF_SLUG}
@@ -38,35 +24,24 @@ test:
       - node_modules/
     policy: pull-push
   artifacts:
+    name: ${CI_JOB_NAME}
+    expire_in: "15min"
     paths:
-      - ./dist
-
-
-docker-post:
-  image: docker:24.0.5
-  stage: deploy
-  services:
-    - docker:24.0.5-dind
-  needs:
-    - job: build
+      - ./coverage
   only:
+    - feature/pipelines
     - main
-  script:
-    - docker login registry.gitlab.com -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
-    - docker build -t registry.gitlab.com/iot2960642/web-services/doctors-api:$CI_COMMIT_REF_SLUG .
-    - docker push registry.gitlab.com/iot2960642/web-services/doctors-api:$CI_COMMIT_REF_SLUG
+    - dev
 
-deploy:
-  image: docker:24.0.5
-  stage: deploy
-  services:
-    - docker:24.0.5-dind
+lint:
+  stage: test
   script:
-    - echo "Deploying to production server"
+    - npm install
+    - npm run lint
   only:
+    - feature/pipelines
     - main
-  needs:
-    - job: docker-post
+    - dev
 
 sonarqube-check:
   stage: sonarqube-check
@@ -80,7 +55,36 @@ sonarqube-check:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-  # give token to sonar-scanner
+  script:
     - sonar-scanner
+  dependencies:
+    - test
+  only:
+    - feature/pipelines
+    - main
+    - dev
+
+docker-post:
+  image: docker:24.0.5
+  stage: deploy
+  services:
+    - docker:24.0.5-dind
+  only:
+    - main
+  script:
+    - docker login registry.gitlab.com -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - docker build -t registry.gitlab.com/iot2960642/ydays/backend/api:latest .
+    - docker push registry.gitlab.com/iot2960642/ydays/backend/api:latest
+
+deploy:
+  image: docker:24.0.5
+  stage: deploy
+  services:
+    - docker:24.0.5-dind
+  script:
+    - echo "Deploying to production server"
+  only:
+    - main
+  needs:
+    - job: docker-post
   allow_failure: true
