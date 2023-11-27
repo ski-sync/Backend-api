@@ -49,7 +49,7 @@ export class UserService {
     });
   }
 
-  async findeOne(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
+  async findOne(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
     return this.prisma.user.findUnique({
       where,
     });
