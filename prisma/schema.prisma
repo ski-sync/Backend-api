@@ -18,7 +18,8 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  roles     Role      @relation(fields: [uuid], references: [uuid])
+  rolesUuid String    @db.Uuid
+  roles     Role      @relation(fields: [rolesUuid], references: [uuid])
   runs      Run[]
 }
 
@@ -36,5 +37,6 @@ model Run {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  usersUuid String    @db.Uuid
   users     User      @relation(fields: [uuid], references: [uuid])
 }
