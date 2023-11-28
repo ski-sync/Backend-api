@@ -8,15 +8,18 @@ export class AuthService {
   async signIn(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne({ email });
     if (user && user.password === pass) {
-      const { password, ...result } = user;
+      const result = { ...user };
+      delete result.password;
       return result;
     }
     throw new UnauthorizedException();
   }
 
   async register(email: string, name: string, pass: string): Promise<any> {
-    const user = await this.usersService.createUser({ email, name, password: pass });
-    const { password, ...result } = user;
+    const roles = { connect: { name: 'guest' } };
+    const user = await this.usersService.createUser({ email, name, password: pass, roles });
+    const result = { ...user };
+    delete result.password;
     return result;
   }
 }
