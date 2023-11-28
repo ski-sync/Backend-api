@@ -11,19 +11,20 @@ datasource db {
 }
 
 model User {
-  uuid      String    @id @default(uuid())
+  uuid      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email     String    @unique
   name      String?
   password  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  roles     Role      @relation(fields: [uuid], references: [uuid])
+  rolesUuid String    @db.Uuid
+  roles     Role      @relation(fields: [rolesUuid], references: [uuid])
   runs      Run[]
 }
 
 model Role {
-  uuid      String    @id @default(uuid())
+  uuid      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -32,9 +33,10 @@ model Role {
 }
 
 model Run {
-  uuid      String    @id @default(uuid())
+  uuid      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  usersUuid String    @db.Uuid
   users     User      @relation(fields: [uuid], references: [uuid])
 }
