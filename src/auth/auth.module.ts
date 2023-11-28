@@ -5,15 +5,9 @@ import { UsersModule } from 'src/users/users.module';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import jwtConfiguration from 'src/config/jwt.configuration';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtValidationSchema } from 'src/config/jwt.validation';
-
 @Module({
   imports: [
     UsersModule,
-    ConfigModule.forRoot({
-      load: [jwtConfiguration],
-      validationSchema: jwtValidationSchema,
-    }),
     JwtModule.registerAsync({
       useFactory: async (config: ConfigType<typeof jwtConfiguration>) => ({
         secret: config.secret,

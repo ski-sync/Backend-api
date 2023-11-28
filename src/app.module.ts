@@ -1,16 +1,26 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { DatabaseService } from './database/database.service';
 import { AuthModule } from './auth/auth.module';
-import { RoleModule } from './role/role.module';
-import { APP_GUARD } from '@nestjs/core';
-import { RoleGuard } from './role/role.guard';
-
+import { RoleModule } from './roles/roles.module';
+import { UsersModule } from './users/users.module';
+import { AppController } from './app.controller';
+import { DatabaseService } from './database/database.service';
+import { ConfigModule } from '@nestjs/config';
+import jwtConfiguration from './config/jwt.configuration';
+import { jwtValidationSchema } from './config/jwt.validation';
+import { JwtModule } from '@nestjs/jwt';
 @Module({
-  imports: [UsersModule, AuthModule, RoleModule],
+  imports: [
+    UsersModule,
+    AuthModule,
+    RoleModule,
+    JwtModule,
+    ConfigModule.forRoot({
+      load: [jwtConfiguration],
+      validationSchema: jwtValidationSchema,
+    }),
+  ],
   controllers: [AppController],
-  providers: [AppService, DatabaseService, { provide: APP_GUARD, useClass: RoleGuard }],
+  providers: [AppService, DatabaseService],
 })
 export class AppModule {}
