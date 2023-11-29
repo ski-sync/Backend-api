@@ -27,4 +27,30 @@ export class RolesService {
       orderBy,
     });
   }
+
+  async createRole(data: Prisma.RoleCreateInput): Promise<Role> {
+    return this.prisma.role.create({
+      data,
+    });
+  }
+
+  async updateRole(params: { where: Prisma.RoleWhereUniqueInput; data: Prisma.RoleUpdateInput }): Promise<Role> {
+    const { where, data } = params;
+    return this.prisma.role.update({
+      data,
+      where,
+    });
+  }
+
+  async deleteRole(where: Prisma.RoleWhereUniqueInput): Promise<Role> {
+    return this.prisma.role.delete({
+      where,
+    });
+  }
+
+  async findOne(where: Prisma.RoleWhereUniqueInput): Promise<Role | null> {
+    return this.prisma.role.findUnique({
+      where,
+    });
+  }
 }
