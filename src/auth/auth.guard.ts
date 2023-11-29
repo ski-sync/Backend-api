@@ -12,9 +12,7 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    console.log(request.headers);
     const token = this.extractBearerToken(request.headers.authorization);
-    console.log(token);
 
     if (!token) {
       throw new Error('Token not found');
@@ -31,9 +29,7 @@ export class AuthGuard implements CanActivate {
 
   private extractBearerToken(authHeader: string): string {
     try {
-      console.log(authHeader);
       const bearer = authHeader.split(' ');
-      console.log(bearer);
       return bearer[1];
     } catch (e) {
       throw new UnauthorizedException('Token not found 1212');
