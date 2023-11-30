@@ -16,6 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
     RoleModule,
     JwtModule,
     ConfigModule.forRoot({
+      isGlobal: true,
       load: [jwtConfiguration],
       validationSchema: jwtValidationSchema,
     }),
