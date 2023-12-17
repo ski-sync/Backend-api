@@ -3,7 +3,7 @@ import { UserService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RoleGuard } from 'src/roles/roles.guard';
 import { UserDto } from './dto/user.dto';
-import { ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/roles/roles.decorator';
 import { plainToInstance } from 'class-transformer';
 import { SearchUserDto } from './dto/search-user.dto';
@@ -11,6 +11,7 @@ import { AuthUser } from 'src/auth/auth.decorator';
 import { DeleteUserDto } from './dto/delete-user.dto';
 @UseGuards(AuthGuard, RoleGuard)
 @Controller('users')
+@ApiTags('users')
 /**
  * Controller class for managing user-related operations.
  */
@@ -92,6 +93,7 @@ export class UsersController {
 
   @ApiCreatedResponse({
     description: 'Delete user',
+
     type: UserDto,
   })
   @Delete('delete')
