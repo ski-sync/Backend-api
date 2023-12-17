@@ -47,7 +47,23 @@ export class UsersController {
     const filter = plainToInstance(SearchUserDto, searchUserDto);
     const users = await this.userService.users({
       where: {
-        AND: [{ name: { contains: filter.name } }, { email: { contains: filter.email } }],
+        AND: [
+          {
+            uuid: {
+              equals: filter.uuid,
+            },
+          },
+          {
+            email: {
+              contains: filter.email,
+            },
+          },
+          {
+            name: {
+              contains: filter.name,
+            },
+          },
+        ],
       },
     });
     return users.map(user => plainToInstance(UserDto, user));
