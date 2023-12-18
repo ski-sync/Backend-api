@@ -53,4 +53,8 @@ export class RolesService {
       where,
     });
   }
+
+  async getAll(): Promise<Role[]> {
+    return this.prisma.role.findMany({ where: { deletedAt: null } });
+  }
 }
