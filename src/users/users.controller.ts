@@ -3,7 +3,7 @@ import { UserService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RoleGuard } from 'src/roles/roles.guard';
 import { UserDto } from './dto/user.dto';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/roles/roles.decorator';
 import { plainToInstance } from 'class-transformer';
 import { SearchUserDto } from './dto/search-user.dto';
@@ -28,6 +28,7 @@ export class UsersController {
   })
   @Get()
   @Roles(['admin'])
+  @ApiBearerAuth()
   async getAllUsers(): Promise<UserDto[]> {
     const users = await this.userService.users({});
     return users.map(user => plainToInstance(UserDto, user));
@@ -44,6 +45,7 @@ export class UsersController {
   })
   @Get('search')
   @Roles(['admin'])
+  @ApiBearerAuth()
   async searchUsers(@Body() searchUserDto: SearchUserDto): Promise<UserDto[]> {
     const filter = plainToInstance(SearchUserDto, searchUserDto);
     const users = await this.userService.users({
@@ -98,6 +100,7 @@ export class UsersController {
   })
   @Delete('delete')
   @Roles(['admin'])
+  @ApiBearerAuth()
   async deleteUser(@Body() uuid: DeleteUserDto): Promise<UserDto> {
     const deleteuser = await this.userService.deleteUser({ uuid: uuid.uuid, deletedAt: null });
     return plainToInstance(UserDto, deleteuser);
