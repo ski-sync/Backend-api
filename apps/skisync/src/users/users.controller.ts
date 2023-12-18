@@ -1,13 +1,13 @@
 import { Body, Controller, Delete, Get, UseGuards } from '@nestjs/common';
 import { UserService } from './users.service';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { RoleGuard } from 'src/roles/roles.guard';
+import { AuthGuard } from 'apps/skisync/src/auth/auth.guard';
+import { RoleGuard } from 'apps/skisync/src/roles/roles.guard';
 import { UserDto } from './dto/user.dto';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from 'src/roles/roles.decorator';
+import { Roles } from 'apps/skisync/src/roles/roles.decorator';
 import { plainToInstance } from 'class-transformer';
 import { SearchUserDto } from './dto/search-user.dto';
-import { AuthUser } from 'src/auth/auth.decorator';
+import { AuthUser } from 'apps/skisync/src/auth/auth.decorator';
 import { DeleteUserDto } from './dto/delete-user.dto';
 @UseGuards(AuthGuard, RoleGuard)
 @Controller('users')
