@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './users.service';
 import { UsersController } from './users.controller';
-import { DatabaseService } from 'src/database/database.service';
+import { DatabaseService } from 'apps/skisync/src/database/database.service';
 import { JwtModule } from '@nestjs/jwt';
-import { RolesService } from 'src/roles/roles.service';
+import { RolesService } from 'apps/skisync/src/roles/roles.service';
 
 @Module({
   imports: [JwtModule],

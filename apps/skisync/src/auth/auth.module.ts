@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from 'apps/skisync/src/users/users.module';
 import { ConfigModule, ConfigType } from '@nestjs/config';
-import jwtConfiguration from 'src/config/jwt.configuration';
+import jwtConfiguration from 'apps/skisync/src/config/jwt.configuration';
 import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [

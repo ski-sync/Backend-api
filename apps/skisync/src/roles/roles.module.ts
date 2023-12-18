@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { RolesController } from './roles.controller';
-import { DatabaseService } from 'src/database/database.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { DatabaseService } from 'apps/skisync/src/database/database.service';
+import { AuthGuard } from 'apps/skisync/src/auth/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import jwtConfiguration from './../config/jwt.configuration';

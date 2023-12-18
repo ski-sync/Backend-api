@@ -1,8 +1,32 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/skisync/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/skisync/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/skisync",
+  "projects": {
+    "skisync": {
+      "type": "application",
+      "root": "apps/skisync",
+      "entryFile": "main",
+      "sourceRoot": "apps/skisync/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/skisync/tsconfig.app.json"
+      }
+    },
+    "smtp": {
+      "type": "application",
+      "root": "apps/smtp",
+      "entryFile": "main",
+      "sourceRoot": "apps/smtp/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/smtp/tsconfig.app.json"
+      }
+    }
   }
 }
