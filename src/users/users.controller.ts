@@ -99,8 +99,7 @@ export class UsersController {
   @Delete('delete')
   @Roles(['admin'])
   async deleteUser(@Body() uuid: DeleteUserDto): Promise<UserDto> {
-    const findUser = await this.userService.findOne({ uuid: uuid.uuid });
-    await this.userService.deleteUser(uuid);
-    return plainToInstance(UserDto, findUser);
+    const deleteuser = await this.userService.deleteUser({ uuid: uuid.uuid, deletedAt: null });
+    return plainToInstance(UserDto, deleteuser);
   }
 }
