@@ -1,7 +1,6 @@
 version: '3.1'
 
 services:
-
   db:
     image: postgres
     restart: always
@@ -11,3 +10,15 @@ services:
       POSTGRES_DB: mydb
     ports:
       - 5432:5432
+
+  influxdb:
+    image: influxdb:2.0
+    restart: always
+    ports:
+      - 8086:8086
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: ${DOCKER_INFLUXDB_INIT_MODE}
+      DOCKER_INFLUXDB_INIT_USERNAME: ${DOCKER_INFLUXDB_INIT_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${DOCKER_INFLUXDB_INIT_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: ${DOCKER_INFLUXDB_INIT_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${DOCKER_INFLUXDB_INIT_BUCKET}
