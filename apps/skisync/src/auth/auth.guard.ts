@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import jwtConfiguration from 'apps/skisync/src/config/jwt.configuration';
+import jwtConfiguration from 'lib/config/jwt.configuration';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(

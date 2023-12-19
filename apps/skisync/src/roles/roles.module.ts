@@ -5,8 +5,8 @@ import { DatabaseService } from 'apps/skisync/src/database/database.service';
 import { AuthGuard } from 'apps/skisync/src/auth/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
-import jwtConfiguration from './../config/jwt.configuration';
-import { jwtValidationSchema } from './../config/jwt.validation';
+import jwtConfiguration from 'lib/config/jwt.configuration';
+import { jwtValidationSchema } from 'lib/config/jwt.validation';
 
 @Module({
   imports: [

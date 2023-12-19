@@ -6,4 +6,6 @@ export const databaseValidationSchema = Joi.object({
   DOCKER_INFLUXDB_INIT_PASSWORD: Joi.string().required(),
   DOCKER_INFLUXDB_INIT_ORG: Joi.string().required(),
   DOCKER_INFLUXDB_INIT_BUCKET: Joi.string().required(),
+  RABBITMQ_DEFAULT_USER: Joi.string().required(),
+  RABBITMQ_DEFAULT_PASS: Joi.string().required(),
 });

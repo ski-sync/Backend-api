@@ -6,8 +6,8 @@ import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { DatabaseService } from './database/database.service';
 import { ConfigModule } from '@nestjs/config';
-import jwtConfiguration from './config/jwt.configuration';
-import { jwtValidationSchema } from './config/jwt.validation';
+import jwtConfiguration from 'lib/config/jwt.configuration';
+import { jwtValidationSchema } from 'lib/config/jwt.validation';
 import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [

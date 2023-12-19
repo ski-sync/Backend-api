@@ -1,14 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from 'apps/skisync/src/users/dto/create-user.dto';
+import { ClientProxy } from '@nestjs/microservices';
+import { User } from 'lib/interfaces/smtp.interfaces';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
+    @Inject('SMTP_SERVICE')
+    private readonly smtpProxy: ClientProxy,
   ) {}
 
   async signIn(loginUser: LoginUserDto): Promise<any> {
@@ -29,6 +33,8 @@ export class AuthService {
     const user = await this.usersService.createUser({ ...userToRegister, roles });
     const result = { ...user };
     delete result.password;
+    const payload: User = { email: user.email, name: user.name, token: '12345' };
+    this.smtpProxy.emit('send_email', payload);
     return result;
   }
 }

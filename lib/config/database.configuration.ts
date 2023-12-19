@@ -1,7 +1,11 @@
-export default () => ({
+import { registerAs } from '@nestjs/config';
+
+export default registerAs('database', () => ({
   database_url: process.env.DATABASE_URL,
   DOCKER_INFLUXDB_INIT_USERNAME: process.env.DOCKER_INFLUXDB_INIT_USERNAME,
   DOCKER_INFLUXDB_INIT_PASSWORD: process.env.DOCKER_INFLUXDB_INIT_PASSWORD,
   DOCKER_INFLUXDB_INIT_ORG: process.env.DOCKER_INFLUXDB_INIT_ORG,
   DOCKER_INFLUXDB_INIT_BUCKET: process.env.DOCKER_INFLUXDB_INIT_BUCKET,
-});
+  RABBITMQ_DEFAULT_USER: process.env.RABBITMQ_DEFAULT_USER,
+  RABBITMQ_DEFAULT_PASS: process.env.RABBITMQ_DEFAULT_PASS,
+}));
