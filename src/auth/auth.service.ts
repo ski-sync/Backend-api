@@ -3,6 +3,7 @@ import { UserService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +14,7 @@ export class AuthService {
 
   async signIn(loginUser: LoginUserDto): Promise<any> {
     const user = await this.usersService.findOne({ email: loginUser.email });
-    if (user && user.password === loginUser.password) {
+    if (user && (await bcrypt.compare(loginUser.password, user.password))) {
       const result = { ...user };
       delete result.password;
       const payload = { sub: user.uuid, username: user.name, email: user.email, role: user.rolesUuid };
@@ -26,6 +27,7 @@ export class AuthService {
 
   async register(userToRegister: CreateUserDto): Promise<any> {
     const roles = { connect: { name: 'guest' } };
+    userToRegister.password = await bcrypt.hash(userToRegister.password, 10);
     const user = await this.usersService.createUser({ ...userToRegister, roles });
     const result = { ...user };
     delete result.password;
