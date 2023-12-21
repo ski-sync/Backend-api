@@ -5,6 +5,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from 'apps/skisync/src/users/dto/create-user.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { User } from 'lib/interfaces/smtp.interfaces';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
 
   async signIn(loginUser: LoginUserDto): Promise<any> {
     const user = await this.usersService.findOne({ email: loginUser.email });
-    if (user && user.password === loginUser.password) {
+    if (user && (await bcrypt.compare(loginUser.password, user.password))) {
       const result = { ...user };
       delete result.password;
       const payload = { sub: user.uuid, username: user.name, email: user.email, role: user.rolesUuid };
@@ -29,7 +30,8 @@ export class AuthService {
   }
 
   async register(userToRegister: CreateUserDto): Promise<any> {
-    const roles = { connect: { name: 'guest' } };
+    const roles = { connect: { name: 'user' } };
+    userToRegister.password = await bcrypt.hash(userToRegister.password, 10);
     const user = await this.usersService.createUser({ ...userToRegister, roles });
     const result = { ...user };
     delete result.password;
