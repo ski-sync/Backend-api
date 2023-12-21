@@ -2,12 +2,15 @@ import { CanActivate, ExecutionContext, Inject, Injectable, UnauthorizedExceptio
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import jwtConfiguration from 'src/config/jwt.configuration';
+import { InvalidToken } from '@prisma/client';
+import { DatabaseService } from '../database/database.service';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     @Inject(jwtConfiguration.KEY)
     private jwtConfig: ConfigType<typeof jwtConfiguration>,
+    private prisma: DatabaseService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -17,6 +20,15 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new Error('Token not found');
     }
+    //
+    // const invalidToken: InvalidToken = await this.prisma.invalidToken.findUnique({
+    //   where: {
+    //     token,
+    //   },
+    // });
+    // if (invalidToken) {
+    //   throw new UnauthorizedException('Token not valid');
+    // }
 
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: this.jwtConfig.secret });
@@ -32,7 +44,7 @@ export class AuthGuard implements CanActivate {
       const bearer = authHeader.split(' ');
       return bearer[1];
     } catch (e) {
-      throw new UnauthorizedException('Token not found 1212');
+      throw new UnauthorizedException('Token not found');
     }
   }
 }

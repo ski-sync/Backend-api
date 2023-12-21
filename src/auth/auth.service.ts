@@ -4,12 +4,14 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { DatabaseService } from '../database/database.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
+    private prisma: DatabaseService,
   ) {}
 
   async signIn(loginUser: LoginUserDto): Promise<any> {
@@ -24,6 +26,13 @@ export class AuthService {
     }
     throw new UnauthorizedException();
   }
+  findToken(token: string): Promise<any> {
+    return this.prisma.invalidToken.findUnique({
+      where: {
+        token,
+      },
+    });
+  }
 
   async register(userToRegister: CreateUserDto): Promise<any> {
     const roles = { connect: { name: 'guest' } };
@@ -32,5 +41,14 @@ export class AuthService {
     const result = { ...user };
     delete result.password;
     return result;
+  }
+
+  async logout(token: string): Promise<string> {
+    await this.prisma.invalidToken.create({
+      data: {
+        token,
+      },
+    });
+    return 'Logout success';
   }
 }
