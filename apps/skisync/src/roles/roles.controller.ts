@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, UseGuards, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Post, Get, Delete, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { Roles } from './roles.decorator';
 import { AuthGuard } from './../auth/auth.guard';
@@ -39,7 +39,7 @@ export class RolesController {
 
   @ApiCreatedResponse({ description: 'Get all roles', type: DeleteRoleDto })
   @Roles(['admin'])
-  @Post('delete')
+  @Delete('delete')
   delete(@Body() dto: DeleteRoleDto) {
     if (dto.name) {
       return this.rolesService.updateRole({ where: { name: dto.name, deletedAt: null }, data: { deletedAt: new Date() } });

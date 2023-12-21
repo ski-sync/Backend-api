@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import jwtConfiguration from './config/jwt.configuration';
 import { jwtValidationSchema } from './config/jwt.validation';
 import { JwtModule } from '@nestjs/jwt';
+import { RunController } from './run/run.controller';
 @Module({
   imports: [
     UsersModule,
@@ -21,7 +22,7 @@ import { JwtModule } from '@nestjs/jwt';
       validationSchema: jwtValidationSchema,
     }),
   ],
-  controllers: [AppController],
+  controllers: [AppController, RunController],
   providers: [AppService, DatabaseService],
 })
 export class AppModule {}
