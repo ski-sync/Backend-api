@@ -27,6 +27,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/smtp/tsconfig.app.json"
       }
+    },
+    "influx": {
+      "type": "application",
+      "root": "apps/influx",
+      "entryFile": "main",
+      "sourceRoot": "apps/influx/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/influx/tsconfig.app.json"
+      }
     }
   }
 }
