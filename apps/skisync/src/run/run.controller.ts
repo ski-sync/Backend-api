@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { RunService } from './run.service';
 import { ApiBearerAuth, ApiTags, ApiCreatedResponse } from '@nestjs/swagger';
 import { AuthGuard } from './../auth/auth.guard';
@@ -18,5 +18,12 @@ export class RunController {
   @Get()
   getRuns() {
     return this.runService.getRuns();
+  }
+
+  @ApiCreatedResponse({ description: 'write user run', type: string })
+  @Roles(['admin', 'user'])
+  @Get('write')
+  writeRuns() {
+    return this.runService.writeRuns();
   }
 }

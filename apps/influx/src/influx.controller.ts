@@ -8,6 +8,15 @@ export class InfluxController {
 
   @MessagePattern('get_runs')
   getHello(): string {
-    return this.influxService.getHello();
+    console.log('read');
+    return this.influxService.readData();
+  }
+
+  @MessagePattern('write_runs')
+  write(): string {
+    console.log('write');
+    //write in influxdb
+
+    return this.influxService.writeData();
   }
 }

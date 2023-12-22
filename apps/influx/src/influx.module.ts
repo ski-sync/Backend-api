@@ -19,6 +19,6 @@ import { InfluxService } from './influx.service';
 
   controllers: [InfluxController],
 
-  // exports: ['InfluxClient'],
+  exports: ['InfluxClient'],
 })
 export class InfluxModule {}
