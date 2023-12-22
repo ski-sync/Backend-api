@@ -1,7 +1,6 @@
-import { Transport } from '@nestjs/microservices';
-import { MicroserviceOptions } from '@nestjs/microservices/interfaces/microservice-configuration.interface';
+import { Transport, RmqOptions } from '@nestjs/microservices';
 
-export const InfluxDbMicrosericeOptions: MicroserviceOptions = {
+export const InfluxDbMicrosericeOptions: RmqOptions = {
   transport: Transport.RMQ,
   options: {
     urls: [`amqp://localhost:5672`],

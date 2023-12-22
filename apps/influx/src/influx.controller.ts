@@ -1,11 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { InfluxService } from './influx.service';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
 export class InfluxController {
   constructor(private readonly influxService: InfluxService) {}
 
-  @Get()
+  @MessagePattern('get_runs')
   getHello(): string {
     return this.influxService.getHello();
   }

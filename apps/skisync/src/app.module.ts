@@ -9,12 +9,14 @@ import { ConfigModule } from '@nestjs/config';
 import jwtConfiguration from 'lib/config/jwt.configuration';
 import { jwtValidationSchema } from 'lib/config/jwt.validation';
 import { JwtModule } from '@nestjs/jwt';
+import { RunModule } from './run/run.module';
 @Module({
   imports: [
     UsersModule,
     AuthModule,
     RoleModule,
     JwtModule,
+    RunModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [jwtConfiguration],

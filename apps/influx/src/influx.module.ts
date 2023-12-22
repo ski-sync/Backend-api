@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { InfluxDB } from '@influxdata/influxdb-client';
 import { influxDBConfig } from 'lib/config/influx-db.configuration';
+import { InfluxController } from './influx.controller';
+import { InfluxService } from './influx.service';
 
 @Module({
   providers: [
@@ -9,11 +11,14 @@ import { influxDBConfig } from 'lib/config/influx-db.configuration';
       provide: 'InfluxClient',
       useFactory: async () => {
         const influxDBClient = new InfluxDB(influxDBConfig);
-        console.log(influxDBConfig);
         return influxDBClient;
       },
     },
+    InfluxService,
   ],
-  exports: ['InfluxClient'],
+
+  controllers: [InfluxController],
+
+  // exports: ['InfluxClient'],
 })
 export class InfluxModule {}
