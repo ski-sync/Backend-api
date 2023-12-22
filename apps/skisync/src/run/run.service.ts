@@ -13,8 +13,7 @@ export class RunService {
     return this.influxProxy.send('get_runs', payload);
   }
 
-  async writeRuns(): Promise<any> {
-    const payload = '';
-    return this.influxProxy.send('write_runs', payload);
+  async writeRuns(data: any): Promise<any> {
+    return this.influxProxy.send('write_runs', data);
   }
 }

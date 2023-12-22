@@ -23,9 +23,9 @@ export class InfluxService {
     return 'Read Data';
   }
 
-  writeData(): string {
+  writeData(temp: number): string {
     const writer = this.influxDB.getWriteApi('skiSync', 'RunData');
-    const point = new Point('run').floatField('temperature', 23.43).stringField('uuid', 'fesfsf-grdhiod-4634grdgrd');
+    const point = new Point('run').floatField('temperature', temp);
     writer.writePoint(point);
     try {
       writer

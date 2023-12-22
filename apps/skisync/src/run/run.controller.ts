@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards, Body } from '@nestjs/common';
 import { RunService } from './run.service';
 import { ApiBearerAuth, ApiTags, ApiCreatedResponse } from '@nestjs/swagger';
 import { AuthGuard } from './../auth/auth.guard';
@@ -22,8 +22,8 @@ export class RunController {
 
   @ApiCreatedResponse({ description: 'write user run', type: string })
   @Roles(['admin', 'user'])
-  @Get('write')
-  writeRuns() {
-    return this.runService.writeRuns();
+  @Post('write')
+  writeRuns(@Body() data: any) {
+    return this.runService.writeRuns(data.temperature);
   }
 }

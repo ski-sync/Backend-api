@@ -13,10 +13,9 @@ export class InfluxController {
   }
 
   @MessagePattern('write_runs')
-  write(): string {
+  write(data: any): string {
     console.log('write');
-    //write in influxdb
 
-    return this.influxService.writeData();
+    return this.influxService.writeData(data);
   }
 }
