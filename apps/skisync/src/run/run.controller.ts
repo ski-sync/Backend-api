@@ -5,6 +5,8 @@ import { AuthGuard } from './../auth/auth.guard';
 import { RoleGuard } from './../roles/roles.guard';
 import { Roles } from '../roles/roles.decorator';
 import { string } from 'joi';
+import { Run } from 'lib/interfaces/run.interfaces';
+import { randomUUID } from 'crypto';
 
 @Controller('run')
 @ApiBearerAuth()
@@ -16,14 +18,37 @@ export class RunController {
   @ApiCreatedResponse({ description: "Get all user's runs", type: string })
   @Roles(['admin', 'user'])
   @Get()
-  getRuns() {
-    return this.runService.getRuns();
+  getRuns(@Body() data: any) {
+    return this.runService.getRuns(data.bucket_id);
   }
 
   @ApiCreatedResponse({ description: 'write user run', type: string })
   @Roles(['admin', 'user'])
   @Post('write')
   writeRuns(@Body() data: any) {
-    return this.runService.writeRuns(data.temperature);
+
+    // generate random run data
+    const run: Run = {
+      id: '1',
+      // generate random userID
+      userId: randomUUID(),
+      runId: randomUUID(),
+      points: [],
+    }
+
+    for (let i = 0; i < 1000; i++) {
+      run.points.push({
+        humidity: Math.random() * 100,
+        temperature: Math.random() * 100,
+        pressure: Math.random() * 100,
+        altitude: Math.random() * 100,
+        latitude: Math.random() * 100,
+        longitude: Math.random() * 100,
+        // point timestamp every 2 seconds
+        timestamp: Date.now() - i * 1000 * 2,
+      })
+    }
+
+    return this.runService.writeRuns(run);
   }
 }

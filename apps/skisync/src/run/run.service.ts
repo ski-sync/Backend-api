@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { Run } from 'lib/interfaces/run.interfaces';
 
 @Injectable()
 export class RunService {
@@ -8,12 +9,11 @@ export class RunService {
     private influxProxy: ClientProxy,
   ) {}
 
-  async getRuns(): Promise<any> {
-    const payload = '';
-    return this.influxProxy.send('get_runs', payload);
+  async getRuns(bucket_id: string): Promise<any> {
+    return this.influxProxy.send('get_runs', bucket_id);
   }
 
-  async writeRuns(data: any): Promise<any> {
+  async writeRuns(data: Run): Promise<any> {
     return this.influxProxy.send('write_runs', data);
   }
 }
