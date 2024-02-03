@@ -34,6 +34,8 @@ model Role {
 
 model Run {
   uuid      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  start_run DateTime
+  end_run   DateTime
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
