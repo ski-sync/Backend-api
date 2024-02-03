@@ -39,7 +39,7 @@ export class InfluxService {
         const bucket = await bucketsAPI.postBuckets({
             body: {
                 orgID: influxDBConfig.orgID,
-                name: run.userId + '-' + run.runId,
+                name: run.runId,
                 retentionRules: [
                   {
                     type: 'expire',
@@ -57,7 +57,7 @@ export class InfluxService {
 
 
     // Proceed with writing points to the newly created bucket
-    const writer = this.influxDB.getWriteApi('skiSync', run.userId + '-' + run.runId, 'ms');
+    const writer = this.influxDB.getWriteApi('skiSync', run.runId, 'ms');
     run.points.forEach(point => {
         const p = new Point('run')
             .floatField('humidity', point.humidity)

@@ -6,7 +6,7 @@ export interface  Run {
 }
   
 
-interface Point {
+export interface Point {
     humidity: number;
     temperature: number;
     pressure: number;

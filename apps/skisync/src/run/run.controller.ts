@@ -7,6 +7,7 @@ import { Roles } from '../roles/roles.decorator';
 import { string } from 'joi';
 import { Run } from 'lib/interfaces/run.interfaces';
 import { randomUUID } from 'crypto';
+import { AuthUser } from '../auth/auth.decorator';
 
 @Controller('run')
 @ApiBearerAuth()
@@ -25,30 +26,23 @@ export class RunController {
   @ApiCreatedResponse({ description: 'write user run', type: string })
   @Roles(['admin', 'user'])
   @Post('write')
-  writeRuns(@Body() data: any) {
+  writeRuns(@Body() data: any, @AuthUser() user: any) {
 
     // generate random run data
-    const run: Run = {
-      id: '1',
-      // generate random userID
-      userId: randomUUID(),
-      runId: randomUUID(),
-      points: [],
-    }
+    const points = [];
 
     for (let i = 0; i < 1000; i++) {
-      run.points.push({
+      points.push({
         humidity: Math.random() * 100,
         temperature: Math.random() * 100,
         pressure: Math.random() * 100,
         altitude: Math.random() * 100,
         latitude: Math.random() * 100,
         longitude: Math.random() * 100,
-        // point timestamp every 2 seconds
         timestamp: Date.now() - i * 1000 * 2,
       })
     }
 
-    return this.runService.writeRuns(run);
+    return this.runService.writeRuns(points, user.sub);
   }
 }
