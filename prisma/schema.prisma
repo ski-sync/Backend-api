@@ -42,3 +42,10 @@ model Run {
   usersUuid String   @db.Uuid
   user      User     @relation(fields: [usersUuid], references: [uuid])
 }
+
+model InvalidToken {
+  uuid      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
