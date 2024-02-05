@@ -12,7 +12,7 @@ import { AuthUser } from '../auth/auth.decorator';
 @Controller('run')
 @ApiBearerAuth()
 @UseGuards(AuthGuard, RoleGuard)
-@ApiTags('Roles')
+@ApiTags('Runs')
 export class RunController {
   constructor(private runService: RunService) {}
 

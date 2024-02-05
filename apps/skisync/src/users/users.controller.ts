@@ -12,7 +12,7 @@ import { DeleteUserDto } from './dto/delete-user.dto';
 
 @UseGuards(AuthGuard, RoleGuard)
 @Controller('users')
-@ApiTags('users')
+@ApiTags('Users')
 /**
  * Controller class for managing user-related operations.
  */
