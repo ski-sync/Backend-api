@@ -9,9 +9,10 @@ import { plainToInstance } from 'class-transformer';
 import { SearchUserDto } from './dto/search-user.dto';
 import { AuthUser } from 'apps/skisync/src/auth/auth.decorator';
 import { DeleteUserDto } from './dto/delete-user.dto';
+
 @UseGuards(AuthGuard, RoleGuard)
 @Controller('users')
-@ApiTags('users')
+@ApiTags('Users')
 /**
  * Controller class for managing user-related operations.
  */
