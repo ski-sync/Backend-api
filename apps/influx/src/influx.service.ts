@@ -68,7 +68,8 @@ export class InfluxService {
     const temp: { [time: string]: ExportPoint } = {};
     run.forEach((data: any) => {
       if (!temp[data._time]) {
-        temp[data._time] = {};
+        temp[data._time] = {} as ExportPoint;
+        temp[data._time].timestamp = data._time;
       }
       temp[data._time][data._field] = data._value;
     });

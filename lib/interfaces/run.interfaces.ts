@@ -2,10 +2,10 @@ export interface Run {
   id: string;
   userId: string;
   runId: string;
-  points: Point[];
+  points: ExportPoint[];
 }
 
-export interface Point {
+export interface ExportPoint {
   humidity: number;
   temperature: number;
   pressure: number;
@@ -13,10 +13,6 @@ export interface Point {
   latitude: number;
   longitude: number;
   timestamp: string;
-}
-
-export interface ExportPoint {
-  [timestamp: string]: [humidity: number, temperature: number, pressure: number, altitude: number, latitude: number, longitude: number];
 }
 
 export interface ExportRun {
