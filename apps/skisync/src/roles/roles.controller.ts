@@ -20,6 +20,7 @@ export class RolesController {
   @Roles(['admin'])
   @Get('all')
   get() {
+    // console.log('get all roles');
     return this.rolesService.getAll();
   }
 
