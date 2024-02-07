@@ -1,0 +1,14 @@
+name: block_push
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  block_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block push to main
+        run: |
+          echo "Push to main is blocked"
+          exit 1
