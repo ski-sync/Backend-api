@@ -5,7 +5,6 @@ import { Point } from 'lib/interfaces/run.interfaces';
 
 @Injectable()
 export class RunService {
-  
   constructor(
     @Inject('INFLUX_SERVICE')
     private influxProxy: ClientProxy,
@@ -20,25 +19,25 @@ export class RunService {
   async writeRuns(data: Point[], user_id: string): Promise<any> {
     console.log('userId', user_id);
 
-  // Vérifiez que data[0] et data[data.length - 1] existent pour éviter les erreurs de runtime
-  if (data.length === 0) {
-    throw new Error('Data array is empty.');
-  }
+    // Vérifiez que data[0] et data[data.length - 1] existent pour éviter les erreurs de runtime
+    if (data.length === 0) {
+      throw new Error('Data array is empty.');
+    }
 
-  const userExists = await this.prisma.user.findUnique({
-    where: { uuid: user_id },
-  });
-  
-  if (!userExists) {
-    throw new Error(`User with ID ${user_id} does not exist.`);
-  }
+    const userExists = await this.prisma.user.findUnique({
+      where: { uuid: user_id },
+    });
 
-  // Assurez-vous que `timestamp` est un nombre (millisecondes UNIX) ou une string ISO valide
-  const startTimestamp = new Date(data[0].timestamp).toISOString();
-  const endTimestamp = new Date(data[data.length - 1].timestamp).toISOString();
+    if (!userExists) {
+      throw new Error(`User with ID ${user_id} does not exist.`);
+    }
 
-  // ...
-    const runParams = { 
+    // Assurez-vous que `timestamp` est un nombre (millisecondes UNIX) ou une string ISO valide
+    const startTimestamp = new Date(data[0].timestamp).toISOString();
+    const endTimestamp = new Date(data[data.length - 1].timestamp).toISOString();
+
+    // ...
+    const runParams = {
       start_run: startTimestamp,
       end_run: endTimestamp,
       usersUuid: user_id, // Add the missing usersUuid property
@@ -56,11 +55,11 @@ export class RunService {
     };
 
     this.influxProxy.send('write_runs', run).subscribe({
-      next: (result) => {
+      next: result => {
         console.log('InfluxDB write result:', result);
-      }
+      },
     });
     // Envoi des données de la course à InfluxDB via influxProxy
-    return new_run
+    return new_run;
   }
 }

@@ -27,7 +27,6 @@ export class RunController {
   @Roles(['admin', 'user'])
   @Post('write')
   writeRuns(@Body() data: any, @AuthUser() user: any) {
-
     // generate random run data
     const points = [];
 
@@ -40,7 +39,7 @@ export class RunController {
         latitude: Math.random() * 100,
         longitude: Math.random() * 100,
         timestamp: Date.now() - i * 1000 * 2,
-      })
+      });
     }
 
     return this.runService.writeRuns(points, user.sub);
