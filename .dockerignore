@@ -1,0 +1,14 @@
+.vscode
+.github
+/node_modules
+.env
+.gitlab-ci.yml
+.prettierrc
+README.md
+sonar-project.properties
+.example.env
+/dist
+Dockerfile
+.gitignore
+docker-compose.yml
+eslintrc.js

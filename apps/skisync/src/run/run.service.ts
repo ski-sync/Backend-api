@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { DatabaseService } from '../database/database.service';
-import { Point } from 'lib/interfaces/run.interfaces';
+import { ExportPoint } from 'lib/interfaces/run.interfaces';
 
 @Injectable()
 export class RunService {
@@ -16,7 +16,7 @@ export class RunService {
     return this.influxProxy.send('get_runs', bucket_id);
   }
 
-  async writeRuns(data: Point[], user_id: string): Promise<any> {
+  async writeRuns(data: ExportPoint[], user_id: string): Promise<any> {
     console.log('userId', user_id);
 
     // Vérifiez que data[0] et data[data.length - 1] existent pour éviter les erreurs de runtime
