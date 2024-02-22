@@ -31,7 +31,7 @@ export class UsersController {
   @Roles(['admin'])
   @ApiBearerAuth()
   async getAllUsers(): Promise<UserDto[]> {
-    const users = await this.userService.users({});
+    const users = await this.userService.users({ where: { deletedAt: null } });
     return users.map(user => plainToInstance(UserDto, user));
   }
 
