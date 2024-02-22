@@ -61,6 +61,8 @@ services:
     restart: always
     networks:
       - rabbitmq
+    environment:
+      RESEND_TOKEN: ${RESEND_TOKEN}
 
   app:
     build:
